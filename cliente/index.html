@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>socket.io</title>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+    <script>
+        const socket = io("http://localhost:3000");
+
+        socket.emit("unir-grupo", {grupoId: "g34"});
+
+        socket.on("integrante-nuevo", data => {
+            console.log(`se ha unido ${data.socketId} al room ${data.grupoId}`)
+        });
+
+        socket.on("cliente-desconectado", data => {
+            //.....
+        })
+
+        // cuando se conecta
+        socket.on("connect", () => {
+            console.log("socket conectado:", socket.id);
+            console.log("estatus:", socket.connected);
+        });
+
+        // cuando se desconecta
+        socket.on("disconnect", () => {
+            console.log("socket desconectado:", socket.id);
+            console.log("estatus:", socket.connected);
+        });
+
+        // cuando se intenta reconectar
+        socket.io.on("reconnect_attempt", () => {
+            console.log("estoy intentando reconectarme");
+        });
+
+        // cuando en un intento de conexión no se puede conectar
+        socket.on("connect_error", () => {
+            console.log("no pude conectarme");
+        });
+
+        // cuando logra reconectarse
+        socket.io.on("reconnect", () => {
+            console.log("me he vuelto a conectar");
+        });
+
+        // cuando se emite el evento al socket
+        socket.on("evento-personalizado", data => {
+            console.log(data);
+        });
+
+        /* setInterval(() => {
+            console.log("enviando posición");
+            socket.volatile.emit("posicion", {x: 1, y: 1});
+        }, 2000); */
+
+    </script>
+</body>
+
+</html>
